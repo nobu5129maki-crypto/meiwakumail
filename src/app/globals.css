@@ -1,0 +1,260 @@
+@import "tailwindcss";
+
+/*
+  色は CSS 変数で持っています。
+  ダークモードは html の data-theme を切り替えるだけです。
+  判定結果の緑・黄・赤は、色だけに頼らず言葉も併記します。
+*/
+
+:root,
+[data-theme="light"] {
+  --paper: #f3efe4;
+  --ink: #1b2330;
+  --muted: #5c6572;
+  --card: #fffdf8;
+  --line: #e3d8c6;
+  --pine: #146b43;
+  --on-pine: #ffffff;
+  --pine-text: #0f5a38;
+  --safe: #0f6b40;
+  --safe-bg: #e3f6eb;
+  --caution: #8a4f00;
+  --caution-bg: #fff1cc;
+  --danger: #a31b16;
+  --danger-bg: #fdeceb;
+  --shadow: 0 12px 32px rgba(48, 36, 12, 0.08);
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --paper: #10141b;
+  --ink: #f4f0e6;
+  --muted: #c8c2b6;
+  --card: #1b212b;
+  --line: #343c4a;
+  --pine: #146b43;
+  --on-pine: #ffffff;
+  --pine-text: #9be7bf;
+  --safe: #9be7bf;
+  --safe-bg: #143024;
+  --caution: #ffd27a;
+  --caution-bg: #3a2c12;
+  --danger: #ffb4ae;
+  --danger-bg: #3f1d1b;
+  --shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-card: var(--card);
+  --color-line: var(--line);
+  --color-pine: var(--pine);
+  --color-on-pine: var(--on-pine);
+  --color-pine-text: var(--pine-text);
+  --color-safe: var(--safe);
+  --color-safe-bg: var(--safe-bg);
+  --color-caution: var(--caution);
+  --color-caution-bg: var(--caution-bg);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --font-sans: "Yu Gothic UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+[data-theme="light"] .when-dark {
+  display: none;
+}
+
+[data-theme="dark"] .when-light {
+  display: none;
+}
+
+a {
+  color: inherit;
+}
+
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--pine-text);
+  outline-offset: 2px;
+}
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  box-shadow: var(--shadow);
+}
+
+.field {
+  width: 100%;
+  border-radius: 0.9rem;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 0.8rem 0.9rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.btn-primary,
+.btn-secondary,
+.chip,
+.nav-link {
+  font: inherit;
+  cursor: pointer;
+}
+
+.btn-primary,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  width: 100%;
+  border-radius: 999px;
+  padding: 0.6rem 1rem;
+  font-weight: 700;
+}
+
+.btn-primary {
+  border: 0;
+  background: var(--pine);
+  color: var(--on-pine);
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.08);
+}
+
+.btn-secondary {
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+}
+
+.chip {
+  min-height: 2.75rem;
+  border-radius: 999px;
+  border: 1px dashed var(--line);
+  background: transparent;
+  color: var(--ink);
+  padding: 0.35rem 0.9rem;
+  font-weight: 700;
+}
+
+.nav-link {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: 0 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+/* 画面上部の色切り替えは、横幅いっぱいにはしない */
+header .btn-secondary {
+  width: auto;
+  flex: 0 0 auto;
+}
+
+.nav-link-active {
+  background: var(--pine);
+  border-color: var(--pine);
+  color: var(--on-pine);
+}
+
+.choice {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.15rem 1.15rem 1.2rem;
+  border-radius: 1.25rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  min-height: 8.5rem;
+}
+
+.choice:active {
+  transform: translateY(1px);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.15rem 0.65rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.badge-safe {
+  background: var(--safe-bg);
+  color: var(--safe);
+}
+
+.badge-caution {
+  background: var(--caution-bg);
+  color: var(--caution);
+}
+
+.badge-danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.meter {
+  height: 0.7rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--line);
+}
+
+.meter > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.meter-safe {
+  background: var(--safe);
+}
+
+.meter-caution {
+  background: var(--caution);
+}
+
+.meter-danger {
+  background: var(--danger);
+}
+
+#result {
+  scroll-margin-top: 1rem;
+}
