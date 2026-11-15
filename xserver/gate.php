@@ -50,6 +50,22 @@ function meiwaku_content_type($path)
     return 'application/octet-stream';
 }
 
+function meiwaku_is_install_file($relative)
+{
+    $relative = str_replace('\\', '/', (string) $relative);
+    $relative = rawurldecode($relative);
+    $relative = ltrim($relative, '/');
+    $allowed = array(
+        'manifest.webmanifest' => true,
+        'sw.js' => true,
+        'icons/icon-192.png' => true,
+        'icons/icon-512.png' => true,
+        'icons/icon-maskable-192.png' => true,
+        'icons/icon-maskable-512.png' => true,
+    );
+    return isset($allowed[$relative]);
+}
+
 function meiwaku_requested_path()
 {
     if (isset($_GET['mw_path'])) {
@@ -122,19 +138,34 @@ function meiwaku_resolve($relative)
     return $real;
 }
 
-if (!meiwaku_logged_in()) {
+$requested = meiwaku_requested_path();
+$publicInstall = meiwaku_is_install_file($requested);
+
+if (!$publicInstall && !meiwaku_logged_in()) {
     meiwaku_deny();
 }
 
-$file = meiwaku_resolve(meiwaku_requested_path());
+$file = meiwaku_resolve($requested);
 if ($file === '') {
     meiwaku_miss();
+}
+if ($publicInstall) {
+    $root = realpath(__DIR__);
+    $prefix = $root === false ? '' : rtrim($root, '/') . '/';
+    $suffix = $prefix !== '' && strpos($file, $prefix) === 0 ? substr($file, strlen($prefix)) : '';
+    if (!meiwaku_is_install_file($suffix)) {
+        meiwaku_miss();
+    }
 }
 
 $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 header('Content-Type: ' . meiwaku_content_type($file));
 header('X-Content-Type-Options: nosniff');
-if ($ext === 'html') {
+if ($publicInstall && $ext === 'js') {
+    header('Cache-Control: no-cache');
+} elseif ($publicInstall) {
+    header('Cache-Control: public, max-age=3600');
+} elseif ($ext === 'html') {
     header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
     header('Pragma: no-cache');
 } else {

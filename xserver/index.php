@@ -63,7 +63,13 @@ http_response_code(200);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#f3efe4">
+    <link rel="manifest" href="./manifest.webmanifest">
     <title>ログイン｜めいわくチェック</title>
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(function () {});
+        }
+    </script>
     <style>
         * { box-sizing: border-box; }
         body {
