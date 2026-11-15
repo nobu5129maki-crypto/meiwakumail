@@ -87,9 +87,20 @@ export function makePreview(source: string): string {
   return oneLine.length > 60 ? `${oneLine.slice(0, 60)}…` : oneLine;
 }
 
+function makeId(): string {
+  try {
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+      return crypto.randomUUID();
+    }
+  } catch {
+    // HTTP では randomUUID が使えない。下の組み立てに任せる。
+  }
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
 export function addHistory(kind: HistoryKind, previewSource: string, result: JudgeResult): HistoryItem[] {
   const next: HistoryItem = {
-    id: crypto.randomUUID(),
+    id: makeId(),
     kind,
     createdAt: new Date().toISOString(),
     level: result.level,

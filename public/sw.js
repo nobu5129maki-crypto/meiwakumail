@@ -14,5 +14,7 @@ self.addEventListener("fetch", (event) => {
   const requestUrl = new URL(event.request.url);
   if (requestUrl.origin !== self.location.origin) return;
   if (event.request.method !== "GET") return;
+  // ページ移動はブラウザに任せる。ログインのやり直しを途中で捕まえない。
+  if (event.request.mode === "navigate") return;
   event.respondWith(fetch(event.request));
 });
